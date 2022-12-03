@@ -49,4 +49,14 @@ fun main() {
 		
 		return topThreeElvesCalories.sum()
 	}
+	
+	// test if implementation meets criteria from the description
+	val testInput = readInput("Day01_test")
+	println(part1(testInput) == 24000)
+	
+	println(part2(testInput) == 45000)
+	
+	val input = readInput("Day01")
+	println(part1(input))
+	println(part2(input))
 }
