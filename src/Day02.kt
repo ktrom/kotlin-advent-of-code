@@ -1,7 +1,7 @@
 import java.util.NoSuchElementException
 
 fun main() {
-	fun part1(matchups: List<List<Shape>>): Int{
+	fun part1(matchups: List<List<Shape>>): Int {
 		
 		// aggregates points earned from all matchups
 		val score: List<Int> = matchups.map { matchup ->
@@ -34,20 +34,25 @@ fun main() {
 	fun part2(input: List<String>): Int {
 		val opposingShapesToDesiredOutcomes: List<Pair<Shape, Outcome>> =
 			input.map { matchup ->
-				val matchupInputs: List<String> = matchup.split(" " )
-				Pair(getShapeAssociatedWithLetter(matchupInputs.get(0)), getOutcomeAssociatedWithLetter(matchupInputs.get(1)))
+				val matchupInputs: List<String> = matchup.split(" ")
+				Pair(
+					getShapeAssociatedWithLetter(matchupInputs.get(0)),
+					getOutcomeAssociatedWithLetter(matchupInputs.get(1))
+				)
 			}
 		
 		val matchups: List<List<Shape>> = opposingShapesToDesiredOutcomes.map { opposingShapeToDesiredOutcome ->
-			val opposingShape : Shape = opposingShapeToDesiredOutcome.first
-			val desiredOutcome : Outcome = opposingShapeToDesiredOutcome.second
+			val opposingShape: Shape = opposingShapeToDesiredOutcome.first
+			val desiredOutcome: Outcome = opposingShapeToDesiredOutcome.second
 			
 			val desiredOutcomeForOpponent = getDesiredOutcomeForOpponent(desiredOutcome)
 			
 			val opponentOutcomes = RoundOutcomes.roundOutcomes[opposingShape]!!
 			
 			// filter to get the Pair<Shape, Outcome> which has our desired Outcome for the opponent's Shape, then use the key for our shape
-			val ourShapeToEnemyOutcome = opponentOutcomes.entries.stream().filter { entry -> entry.value == desiredOutcomeForOpponent }.findFirst().orElseThrow { NoSuchElementException() }
+			val ourShapeToEnemyOutcome =
+				opponentOutcomes.entries.stream().filter { entry -> entry.value == desiredOutcomeForOpponent }
+					.findFirst().orElseThrow { NoSuchElementException() }
 			val shapeToUse = ourShapeToEnemyOutcome.key
 			
 			listOf(opposingShape, shapeToUse)
@@ -98,11 +103,11 @@ private fun getOutcomeAssociatedWithLetter(letter: String): Outcome {
 }
 
 // given the desired outcome for the player, returns our desired outcome for the opponent
-private fun getDesiredOutcomeForOpponent(desiredOutcome: Outcome): Outcome{
-	if(desiredOutcome == Outcome.LOSE){
+private fun getDesiredOutcomeForOpponent(desiredOutcome: Outcome): Outcome {
+	if (desiredOutcome == Outcome.LOSE) {
 		return Outcome.WIN
 	}
-	if(desiredOutcome == Outcome.WIN){
+	if (desiredOutcome == Outcome.WIN) {
 		return Outcome.LOSE
 	}
 	return Outcome.TIE
