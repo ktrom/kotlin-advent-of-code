@@ -5,22 +5,22 @@ fun main() {
     fun getDirectories(input: List<String>, size: Int): Int {
         val root: Node = getSystemTree(input)
 
-       return getDirectories(root, size, Condition.LESS_THAN).map { it.size }.sum()
+       return getDirectories(root, size, Condition.LESS_THAN).sumOf { it.size }
     }
 
     fun part1(input: List<String>): Int {
-        return getDirectories(input, 100000);
+        return getDirectories(input, 100000)
     }
 
     fun part2(input: List<String>): Int {
         val root: Node = getSystemTree(input)
         val totalSpace = 70000000
 
-        // sure, this will have literally ever node, but i've got to get to sleep :p
+        // sure, this will have literally every node, but i've got to get to sleep :p
         val allNodes: List<Node> = getDirectories(root, 1, Condition.GREATER_THAN)
 
         val availableSpace = totalSpace - root.size
-        val necessarySpace = 30000000 - availableSpace;
+        val necessarySpace = 30000000 - availableSpace
 
         return allNodes.filter { it.size > necessarySpace }.minBy { it.size }.size
     }
@@ -44,13 +44,13 @@ class Node(val name: String){
 }
 
 fun getSystemTree(input: List<String>): Node{
-    val fileSystemRoot: Node? = Node("fileSystem")
+    val fileSystemRoot = Node("fileSystem")
     val root = Node("/")
 
-    fileSystemRoot!!.children.put(root.name, root)
+    fileSystemRoot.children[root.name] = root
     root.parent = fileSystemRoot
 
-    var currentNode = fileSystemRoot
+    var currentNode: Node? = fileSystemRoot
 
     // set up node tree
     input.forEach {
@@ -58,22 +58,22 @@ fun getSystemTree(input: List<String>): Node{
         val firstValue: String = reader.next()
 
         if(firstValue == "$"){
-            val cmd: String = reader.next();
+            val cmd: String = reader.next()
 
             if(cmd == "cd"){
-                val nextDirName: String = reader.next();
+                val nextDirName: String = reader.next()
 
-                if(nextDirName == ".."){
-                    currentNode = currentNode!!.parent
+                currentNode = if(nextDirName == ".."){
+                    currentNode!!.parent
                 } else{
-                    currentNode = currentNode!!.children.get(nextDirName)
+                    currentNode!!.children[nextDirName]
                 }
             }
         }
         else if(firstValue == "dir"){
             val dirName: String = reader.next()
             val childNode =  Node(dirName)
-            currentNode!!.children.put(dirName, childNode)
+            currentNode!!.children[dirName] = childNode
             childNode.parent = currentNode
         }
 
@@ -84,12 +84,12 @@ fun getSystemTree(input: List<String>): Node{
             val fileNode = Node(fileName)
             fileNode.size = fileSize
 
-            currentNode!!.children.put(fileName, fileNode)
+            currentNode!!.children[fileName] = fileNode
             fileNode.parent = currentNode
         }
     }
 
-    return root;
+    return root
 }
 
 // If this is called on a node, and that node has -1 size, this will calculate size
@@ -106,9 +106,11 @@ fun getDirectories(node: Node, size: Int, condition: Condition): List<Node> {
        }
     }
 
-    val nodeSizeMeetsCondition = condition == Condition.GREATER_THAN && node.size > size || condition == Condition.LESS_THAN && node.size < size;
+    val nodeSizeMeetsCondition =
+        condition == Condition.GREATER_THAN && node.size > size
+            || condition == Condition.LESS_THAN && node.size < size
 
-    if(nodeSizeMeetsCondition && !node.children.isEmpty()){
+    if(nodeSizeMeetsCondition && node.children.isNotEmpty()){
         nodesMeetingCondition.add(node)
     }
 
