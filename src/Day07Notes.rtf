@@ -1,0 +1,28 @@
+We are looking for candidates for deletion on a full device
+
+We have 2 commands, it looks like
+        `cd` and `ls`
+        `cd` changes directory to following arg
+        `ls` lists contents of directory
+
+Goal: Determine the total size of each directory, report directories with size of > 100000
+    total size = sum of sizes of all contents
+
+Approach:
+    1. Create a "Node" class which has 3 properties:
+                            name: string,
+                            children: Map<String, Node> where key is the child's name and value is the child node
+                            size: int
+
+                            Lines beginning with "dir" are directories
+                            Leaf nodes, i.e. files, have children of size 0
+
+    2. discover the whole file system following commands, populate directory node tree
+    3. perform a recursive search to determine root node's size. In the process, we will discover all subnode sizes
+        3a. store nodes with size > 100000 in toReturn map
+
+
+
+
+
+
