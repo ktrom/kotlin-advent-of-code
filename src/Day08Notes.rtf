@@ -1,0 +1,39 @@
+We come across a patch of tall trees in a grid
+
+Would this location be good for a tree house?
+
+Determine:
+    1. Is there enough tree cover here to keep tree house hidden?
+        a. To do this, count # of trees visible from outside the grid when looking directly along a row or column
+
+sample input:
+
+    30373
+    25512
+    65332
+    33549
+    35390
+
+each digit represents a tree, and the value is the tree's height
+        0 is shortest, 9 is tallest
+
+A tree is visible if all other trees between it and edge of grid are shorter than it.
+        look in 4 cardinal directions from tree (up, down, left, right) to determine visibility
+
+    All of outer trees are obviously visible
+
+    How many trees are visible from outside the grid?
+
+    Approach:
+        Naive approach: for every tree, search all 4 directions to edge of grid and see if the tree is taller than all
+        Alternative approach: keep track of tallest tree in each direction at each tree (node). If tree is found to be visible, stop calculating. Each direction at pt is solved at most 1 time
+
+        class Tree{
+           int tallestEast = -1;
+           int tallestWest = -1;
+           int tallestNorth = -1;
+           int tallestSouth = -1;
+
+           int height;
+           boolean isVisible;
+        }
